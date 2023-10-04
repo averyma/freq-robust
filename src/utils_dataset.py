@@ -13,6 +13,8 @@ from PIL import Image
 # from data.Caltech101.caltech_dataset import Caltech
 # from sklearn.model_selection import train_test_split
 # from torch.utils.data import Subset
+
+data_dir = '/scratch/ssd001/home/ama/workspace/data/'
     
 def load_dataset(dataset, _batch_size = 128, standard_DA = True, freq=False, test_shuffle=False):
 
@@ -66,8 +68,8 @@ def load_binaryMNIST(batch_size, target = [2,7]):
         del temp
         assert target[1]>target[0]
     
-    mnist_train = datasets.MNIST("./data", train=True, transform=transforms.ToTensor())
-    mnist_test = datasets.MNIST("./data", train=False,  transform=transforms.ToTensor())
+    mnist_train = datasets.MNIST(data_dir, train=True, transform=transforms.ToTensor())
+    mnist_test = datasets.MNIST(data_dir, train=False,  transform=transforms.ToTensor())
 
     idx_3, idx_7 = mnist_train.targets == target[0], mnist_train.targets == target[1]
     idx_train = idx_3 | idx_7
@@ -99,8 +101,8 @@ def load_MNIST(batch_size, freq= False, test_shuffle=False):
     # load MNIST data set into data loader
 
     if freq == True:
-        mnist_train = datasets.MNIST("./data", train=True, transform=None)
-        mnist_test = datasets.MNIST("./data", train=False,  transform=None)
+        mnist_train = datasets.MNIST(data_dir, train=True, transform=None)
+        mnist_test = datasets.MNIST(data_dir, train=False,  transform=None)
         dct_matrix = getDCTmatrix(28)
         mnist_train.data = mnist_train.data.to(torch.float)/255
         mnist_train.data = batch_dct2(mnist_train.data, dct_matrix).unsqueeze(1)
@@ -111,8 +113,8 @@ def load_MNIST(batch_size, freq= False, test_shuffle=False):
         test_dataset = TensorDataset(mnist_test.data, mnist_test.targets)
         
     else:
-        train_dataset = datasets.MNIST("./data", train=True, transform=transforms.ToTensor())
-        test_dataset = datasets.MNIST("./data", train=False,  transform=transforms.ToTensor())
+        train_dataset = datasets.MNIST(data_dir, train=True, transform=transforms.ToTensor())
+        test_dataset = datasets.MNIST(data_dir, train=False,  transform=transforms.ToTensor())
     
     train_loader = DataLoader(train_dataset, batch_size = batch_size, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size = batch_size, shuffle=test_shuffle)
@@ -124,8 +126,8 @@ def load_FashionMNIST(batch_size, freq=False, test_shuffle=False):
     # load MNIST data set into data loader
 
     if freq == True:
-        fmnist_train = datasets.FashionMNIST("./data", train=True, transform=None)
-        fmnist_test = datasets.FashionMNIST("./data", train=False,  transform=None)
+        fmnist_train = datasets.FashionMNIST(data_dir, train=True, transform=None)
+        fmnist_test = datasets.FashionMNIST(data_dir, train=False,  transform=None)
         dct_matrix = getDCTmatrix(28)
         fmnist_train.data = fmnist_train.data.to(torch.float)/255
         fmnist_train.data = batch_dct2(fmnist_train.data, dct_matrix).unsqueeze(1)
@@ -136,8 +138,8 @@ def load_FashionMNIST(batch_size, freq=False, test_shuffle=False):
         test_dataset = TensorDataset(fmnist_test.data, fmnist_test.targets)
         
     else:
-        train_dataset = datasets.FashionMNIST("./data", train=True, download = True, transform=transforms.ToTensor())
-        test_dataset = datasets.FashionMNIST("./data", train=False,  download = True, transform=transforms.ToTensor())
+        train_dataset = datasets.FashionMNIST(data_dir, train=True, download = True, transform=transforms.ToTensor())
+        test_dataset = datasets.FashionMNIST(data_dir, train=False,  download = True, transform=transforms.ToTensor())
 
     train_loader = DataLoader(train_dataset, batch_size = batch_size, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size = batch_size, shuffle=test_shuffle)
@@ -155,8 +157,8 @@ def load_grayCIFAR(batch_size):
         transforms.Grayscale(num_output_channels=1),
         transforms.ToTensor()])
 
-    data_train = datasets.CIFAR10("./data", train=True, download = True, transform=transform_train)
-    data_test = datasets.CIFAR10("./data", train=False, download = True, transform=transform_test)
+    data_train = datasets.CIFAR10(data_dir, train=True, download = True, transform=transform_train)
+    data_test = datasets.CIFAR10(data_dir, train=False, download = True, transform=transform_test)
     
     train_loader = DataLoader(data_train, batch_size = batch_size, shuffle=True)
     test_loader = DataLoader(data_test, batch_size = batch_size, shuffle=True)
@@ -180,8 +182,8 @@ def load_binaryCIFAR(batch_size, target1=1, target2=5):
         transforms.ToTensor()])
     
     # load CIFAR data set into data loader
-    data_train = datasets.CIFAR10("./data", train=True, download = True, transform=transform_train)
-    data_test = datasets.CIFAR10("./data", train=False, download = True, transform=transform_test)
+    data_train = datasets.CIFAR10(data_dir, train=True, download = True, transform=transform_train)
+    data_test = datasets.CIFAR10(data_dir, train=False, download = True, transform=transform_test)
     
      
     idx_3, idx_7 = torch.tensor(data_train.targets) == target1, torch.tensor(data_train.targets) == target2
@@ -234,8 +236,8 @@ def load_CIFAR10(batch_size, standard_DA = False, test_shuffle=False):
         transform_test = transforms.Compose([
             transforms.ToTensor()])
 
-    data_train = datasets.CIFAR10("./data", train=True, download = True, transform=transform_train)
-    data_test = datasets.CIFAR10("./data", train=False, download = True, transform=transform_test)
+    data_train = datasets.CIFAR10(data_dir, train=True, download = True, transform=transform_train)
+    data_test = datasets.CIFAR10(data_dir, train=False, download = True, transform=transform_test)
 
     train_loader = DataLoader(data_train, batch_size = batch_size, shuffle=True)
     test_loader = DataLoader(data_test, batch_size = batch_size, shuffle=test_shuffle)
@@ -264,8 +266,8 @@ def load_CIFAR100(batch_size, standard_DA = False, test_shuffle=False):
         transform_test = transforms.Compose([
             transforms.ToTensor()])
 
-    data_train = datasets.CIFAR100("./data", train=True, download = True, transform=transform_train)
-    data_test = datasets.CIFAR100("./data", train=False, download = True, transform=transform_test)
+    data_train = datasets.CIFAR100(data_dir, train=True, download = True, transform=transform_train)
+    data_test = datasets.CIFAR100(data_dir, train=False, download = True, transform=transform_test)
 
     train_loader = DataLoader(data_train, batch_size = batch_size, shuffle=True)
     test_loader = DataLoader(data_test, batch_size = batch_size, shuffle=test_shuffle)
@@ -293,8 +295,8 @@ def load_SVHN(batch_size, standard_DA = False, test_shuffle=False):
         transform_test = transforms.Compose([
             transforms.ToTensor()])
 
-    data_train = datasets.SVHN("./data/SVHN", split='train', download = True, transform=transform_train)
-    data_test = datasets.SVHN("./data/SVHN", split='test', download = True, transform=transform_test)
+    data_train = datasets.SVHN(data_dir+"/SVHN", split='train', download = True, transform=transform_train)
+    data_test = datasets.SVHN(data_dir+"/SVHN", split='test', download = True, transform=transform_test)
     
     train_loader = DataLoader(data_train, batch_size = batch_size, shuffle=True)
     test_loader = DataLoader(data_test, batch_size = batch_size, shuffle=test_shuffle)
@@ -327,9 +329,9 @@ def load_imagenette(batch_size, standard_DA = False, test_shuffle=False):
             transforms.ToTensor(),
             ])
 
-    train_dataset = datasets.ImageFolder(root='/h/ama/workspace/ama-at-vector/freq-robust/data/imagenette2/train',
+    train_dataset = datasets.ImageFolder(root=data_dir+'/imagenette2/train',
                                                transform=transform_train)
-    test_dataset = datasets.ImageFolder(root='/h/ama/workspace/ama-at-vector/freq-robust/data/imagenette2/val',
+    test_dataset = datasets.ImageFolder(root=data_dir+'/imagenette2/val',
                                                transform=transform_test)
 
     train_loader = torch.utils.data.DataLoader(train_dataset,
@@ -342,7 +344,7 @@ def load_imagenette(batch_size, standard_DA = False, test_shuffle=False):
 
 def load_dtd(batch_size, standard_DA=False):
 
-    full_dataset = datasets.ImageFolder(root='/h/ama/workspace/ama-at-vector/freq-robust/data/dtd/dtd/images')
+    full_dataset = datasets.ImageFolder(root=data_dir+'/dtd/dtd/images')
     train_dataset, test_dataset = torch.utils.data.random_split(full_dataset, [3947, 5640-3947], generator=torch.Generator().manual_seed(42))
     assert len(train_dataset)==3947 and len(test_dataset)==1693
 
@@ -438,8 +440,8 @@ def load_tiny(batch_size, standard_DA = False):
         test_transform = transforms.Compose([transforms.ToTensor()])
 
 
-    train_root = '/h/ama/workspace/ama-at-vector/best-mix/data/tiny-imagenet-200/train'
-    validation_root = '/h/ama/workspace/ama-at-vector/best-mix/data/tiny-imagenet-200/val/images'
+    train_root = data_dir+'/tiny-imagenet-200/train'
+    validation_root = data_dir+'/tiny-imagenet-200/val/images'
     train_data = datasets.ImageFolder(train_root, transform=train_transform)
     test_data = datasets.ImageFolder(validation_root, transform=test_transform)
 
@@ -481,9 +483,9 @@ def load_caltech(batch_size, standard_DA = False, test_shuffle=False):
             transforms.ToTensor(),
             ])
 
-    DATA_DIR = './data/Homework2-Caltech101/101_ObjectCategories'
-    SPLIT_TRAIN = './data/Homework2-Caltech101/train.txt'
-    SPLIT_TEST = './data/Homework2-Caltech101/test.txt'
+    DATA_DIR = data_dir+'/Homework2-Caltech101/101_ObjectCategories'
+    SPLIT_TRAIN = data_dir+'/Homework2-Caltech101/train.txt'
+    SPLIT_TEST = data_dir+'/Homework2-Caltech101/test.txt'
 
     data_train = Caltech(DATA_DIR, split = SPLIT_TRAIN, transform=transform_train)
     data_test = Caltech(DATA_DIR, split = SPLIT_TEST, transform=transform_test)
@@ -495,7 +497,7 @@ def load_caltech(batch_size, standard_DA = False, test_shuffle=False):
 def load_fmd(batch_size, standard_DA=False):
 #     https://people.csail.mit.edu/lavanya/fmd.html
 
-    full_dataset = datasets.ImageFolder(root='/h/ama/workspace/ama-at-vector/freq-robust/data/fmd/image')
+    full_dataset = datasets.ImageFolder(root=data_dir+'/fmd/image')
     train_dataset,test_dataset = torch.utils.data.random_split(full_dataset, [700, 300], generator=torch.Generator().manual_seed(42))
 
     if standard_DA:
@@ -555,11 +557,11 @@ def load_flowers(batch_size, standard_DA = False):
             transforms.ToTensor(),
             ])
 
-    _data_train = datasets.Flowers102('./data', split = 'train', transform=transform_train, download = True)
-    _data_val = datasets.Flowers102('./data', split = 'val', transform=transform_train, download = True)
+    _data_train = datasets.Flowers102(data_dir, split = 'train', transform=transform_train, download = True)
+    _data_val = datasets.Flowers102(data_dir, split = 'val', transform=transform_train, download = True)
     # data_train = torch.utils.data.ChainDataset([_data_train, _data_val])
     data_train = torch.utils.data.ConcatDataset([_data_train, _data_val])
-    data_test = datasets.Flowers102('./data', split = 'test', transform = transform_test, download =True)
+    data_test = datasets.Flowers102(data_dir, split = 'test', transform = transform_test, download =True)
     train_loader = DataLoader(data_train, batch_size = batch_size, shuffle=True)
     test_loader = DataLoader(data_test, batch_size = batch_size, shuffle=False)
 
@@ -590,8 +592,8 @@ def load_food(batch_size, standard_DA = False):
             transforms.ToTensor(),
             ])
 
-    data_train = datasets.Food101('./data', split = 'train', transform=transform_train, download = True)
-    data_test = datasets.Food101('./data', split = 'test', transform = transform_test, download =True)
+    data_train = datasets.Food101(data_dir, split = 'train', transform=transform_train, download = True)
+    data_test = datasets.Food101(data_dir, split = 'test', transform = transform_test, download =True)
     train_loader = DataLoader(data_train, batch_size = batch_size, shuffle=True)
     test_loader = DataLoader(data_test, batch_size = batch_size, shuffle=False)
 
@@ -655,8 +657,8 @@ def load_country(batch_size, standard_DA = False):
             transforms.ToTensor(),
             ])
 
-    data_train = datasets.Country211('./data', split = 'train', transform=transform_train, download = True)
-    data_test = datasets.Country211('./data', split = 'test', transform = transform_test, download =True)
+    data_train = datasets.Country211(data_dir, split = 'train', transform=transform_train, download = True)
+    data_test = datasets.Country211(data_dir, split = 'test', transform = transform_test, download =True)
     train_loader = DataLoader(data_train, batch_size = batch_size, shuffle=True)
     test_loader = DataLoader(data_test, batch_size = batch_size, shuffle=False)
 
@@ -687,8 +689,8 @@ def load_cars(batch_size, standard_DA = False):
             transforms.ToTensor(),
             ])
 
-    data_train = datasets.StanfordCars('./data', split = 'train', transform=transform_train, download = True)
-    data_test = datasets.StanfordCars('./data', split = 'test', transform = transform_test, download =True)
+    data_train = datasets.StanfordCars(data_dir, split = 'train', transform=transform_train, download = True)
+    data_test = datasets.StanfordCars(data_dir, split = 'test', transform = transform_test, download =True)
     train_loader = DataLoader(data_train, batch_size = batch_size, shuffle=True)
     test_loader = DataLoader(data_test, batch_size = batch_size, shuffle=False)
 
