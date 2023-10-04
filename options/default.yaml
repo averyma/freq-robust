@@ -19,7 +19,7 @@ seed: 0
 epoch: 200 
 
 # checkpoint
-ckpt_freq: 20
+ckpt_freq: 1
 
 # adversarial training
 pgd_steps: 10
